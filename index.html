@@ -124,47 +124,61 @@
   .orb.on{background:radial-gradient(circle at 35% 30%,#fff,#ff9a44); border-color:#ffc38a; box-shadow:0 0 9px #ff7a2f;}
   .orb.on.fresh{animation:orbpop .3s ease-out;} @keyframes orbpop{0%{transform:scale(.2); opacity:0;}70%{transform:scale(1.2);}100%{transform:scale(1); opacity:1;}}
 
-  .enemies{display:flex; justify-content:center; gap:26px; flex-wrap:wrap; min-height:184px; margin-bottom:4px; align-items:flex-end; position:relative;}
-  .enemies::before{content:''; position:absolute; left:50%; bottom:-4px; transform:translateX(-50%); width:84%; height:56px; border-radius:50%; background:radial-gradient(ellipse at 50% 100%, rgba(255,140,60,.15), transparent 70%); pointer-events:none; z-index:0;}
-  .enemy{width:150px; background:rgba(34,26,16,.7); border:2px solid var(--edge); border-radius:14px; padding:8px 10px 12px; text-align:center; cursor:pointer; transition:border-color .15s; position:relative;}
-  .enemy::before{content:''; position:absolute; left:50%; top:74px; transform:translateX(-50%); width:58px; height:12px; border-radius:50%; background:radial-gradient(ellipse, rgba(0,0,0,.5), transparent 72%); pointer-events:none; z-index:0;}
-  .enemy.big::before{width:74px; top:70px; height:14px;}
-  .enemy:hover{border-color:var(--gold);}
-  .enemy.targeted{border-color:var(--gold);}
-  .enemy.targeted::after{content:''; position:absolute; inset:-4px; border-radius:16px; border:2px solid var(--gold); pointer-events:none; animation:tgtpulse 1.4s ease-in-out infinite;}
-  @keyframes tgtpulse{0%,100%{box-shadow:0 0 9px rgba(240,201,104,.3); opacity:.65;}50%{box-shadow:0 0 20px rgba(240,201,104,.6); opacity:1;}}
+  /* ---- BATTLE STAGE: seamless scene, free-standing figures ---- */
+  .stage{position:relative; height:286px; border-radius:12px; overflow:hidden; border:1px solid var(--edge); margin-bottom:8px;}
+  .chamber-svg{position:absolute; inset:0; width:100%; height:100%; display:block; z-index:0;}
+  .chamber{position:absolute; inset:0; z-index:1; pointer-events:none;}
+  .chamber::after{content:''; position:absolute; inset:0; pointer-events:none;}
+  #combat[data-act="2"] .chamber::after{background:linear-gradient(180deg, rgba(70,120,205,.20), rgba(18,42,92,.30));}
+  #combat[data-act="3"] .chamber::after{background:linear-gradient(180deg, rgba(150,75,205,.22), rgba(52,20,88,.32));}
+  .hero-stage{position:absolute; left:2%; bottom:5%; width:134px; z-index:2;}
+  .hero-stage .heroart{width:134px; height:auto; display:block; filter:drop-shadow(0 8px 10px rgba(0,0,0,.55)); animation:heroBob 3.8s ease-in-out infinite;}
+  .hero-stage.shimmer .heroart{animation:heroBob 3.8s ease-in-out infinite, hpsh .55s ease-out;}
+  .enemies{position:absolute; left:34%; right:2%; bottom:15%; display:flex; justify-content:center; align-items:flex-end; gap:44px; z-index:2;}
+  .enemy{position:relative; display:flex; flex-direction:column; align-items:center; cursor:pointer;}
+  .enemy::before{content:''; position:absolute; left:50%; bottom:-6px; transform:translateX(-50%); width:80px; height:16px; border-radius:50%; background:radial-gradient(ellipse, rgba(0,0,0,.55), transparent 72%); pointer-events:none; z-index:0;}
+  .enemy.big::before{width:112px; height:20px;}
+  .enemy.targeted::after{content:''; position:absolute; left:50%; bottom:-11px; transform:translateX(-50%); width:94px; height:22px; border-radius:50%; border:2px solid var(--gold); pointer-events:none; animation:tgtpulse 1.4s ease-in-out infinite;}
+  .enemy.big.targeted::after{width:126px;}
+  @keyframes tgtpulse{0%,100%{box-shadow:0 0 9px rgba(240,201,104,.35); opacity:.55;}50%{box-shadow:0 0 22px rgba(240,201,104,.7); opacity:1;}}
   .enemy.dead{opacity:.22; pointer-events:none; filter:grayscale(1);}
   .enemy.dying{animation:crumble .6s ease-in forwards;} @keyframes crumble{0%{opacity:1; transform:translateY(0) rotate(0) scale(1);}100%{opacity:.16; transform:translateY(12px) rotate(-7deg) scale(.88);}}
   .enemy.hit{animation:ehit .34s ease-out;} @keyframes ehit{0%{transform:translateX(0);}18%{transform:translateX(-7px);}38%{transform:translateX(6px);}58%{transform:translateX(-4px);}78%{transform:translateX(3px);}100%{transform:translateX(0);}}
   .enemy.lunge{animation:elunge .5s ease-out;} @keyframes elunge{0%{transform:translateY(0);}18%{transform:translateY(-9px);}46%{transform:translateY(16px) scale(1.06);}100%{transform:translateY(0);}}
-  .enemy .sprite{height:72px; display:flex; align-items:flex-end; justify-content:center; position:relative; z-index:1;}
-  .enemy .sprite svg{width:72px; height:72px; filter:drop-shadow(0 3px 5px rgba(0,0,0,.5));}
-  .enemy .sprite.boss svg{width:94px; height:94px;}
+  .enemy .sprite{height:108px; display:flex; align-items:flex-end; justify-content:center; position:relative; z-index:1;}
+  .enemy .sprite svg{width:108px; height:108px; filter:drop-shadow(0 5px 7px rgba(0,0,0,.55));}
+  .enemy .sprite.boss svg{width:142px; height:142px;}
+  .enemy.big .sprite{height:142px;} .enemy.big .sprite svg{width:142px; height:142px;}
+  .enemy:hover .sprite svg{filter:drop-shadow(0 5px 7px rgba(0,0,0,.55)) drop-shadow(0 0 9px var(--gold));}
   .sprite.float{animation:hover 2.6s ease-in-out infinite;} .sprite.ground{animation:breathe 3.4s ease-in-out infinite;}
   @keyframes hover{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}} @keyframes breathe{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-2px) scale(1.025);}}
   .enemy.hit .sprite{animation:eflash .34s ease-out, hover 2.6s ease-in-out infinite;} .enemy.hit .sprite.ground{animation:eflash .34s ease-out, breathe 3.4s ease-in-out infinite;}
   @keyframes eflash{0%,100%{filter:drop-shadow(0 3px 5px rgba(0,0,0,.5));}30%{filter:brightness(2.6) drop-shadow(0 0 12px #ff5c72);}}
-  .enemy .ename{font-size:13px; color:var(--dim); margin:2px 0 6px;}
-  .enemy .ebar{height:13px;} .enemy .ebar .lab{font-size:10px;}
-  .enemy.big{width:166px;}
+  .enemy .ename{position:absolute; left:50%; transform:translateX(-50%); bottom:-18px; font-size:11px; color:#e6d6b4; text-shadow:0 1px 3px #000; white-space:nowrap; z-index:2;}
+  .enemy .ebar{position:absolute; left:50%; transform:translateX(-50%); bottom:-3px; width:86px; height:12px; z-index:2;} .enemy .ebar .lab{font-size:10px;}
+  .enemy.big .ebar{width:114px; height:14px;}
   .intent{position:absolute; top:-14px; left:50%; transform:translateX(-50%); background:#160f08; border:1px solid var(--edge); border-radius:14px; padding:2px 10px; font-size:14px; white-space:nowrap; display:flex; align-items:center; gap:5px;}
   .intent svg{width:15px; height:15px;}
   .intent.atk{border-color:var(--danger); color:#ffb0bb; animation:ipulse 1.5s ease-in-out infinite;}
   @keyframes ipulse{0%,100%{box-shadow:0 0 0 rgba(255,92,114,0);}50%{box-shadow:0 0 11px rgba(255,92,114,.65);}}
   .intent.def{border-color:#6fa0e0; color:#bcd8ff;} .intent.buff{border-color:var(--shadow); color:#e0c0ff;}
-  .estatus{position:absolute; bottom:-10px; left:50%; transform:translateX(-50%); display:flex; gap:4px; flex-wrap:wrap; justify-content:center; max-width:150px;}
+  .estatus{position:absolute; bottom:-36px; left:50%; transform:translateX(-50%); display:flex; gap:4px; flex-wrap:wrap; justify-content:center; max-width:130px; z-index:3;}
   .st{background:#160f08; border:1px solid var(--edge); border-radius:10px; padding:1px 6px; font-size:11px; display:inline-flex; align-items:center; gap:3px;}
   .st svg{width:11px; height:11px;}
   .st-fire{color:var(--fire);} .st-frost{color:var(--frost);} .st-poison{color:var(--poison);}
   .st-vuln{color:var(--vuln);} .st-weak{color:var(--weak);} .st-block{color:#8fd0ff;} .st-str{color:var(--gold);}
   .pstatus{display:inline-flex; gap:4px; align-items:center;}
 
-  .arena-mid{display:flex; align-items:center; justify-content:space-between; gap:14px; margin:6px 0;}
-  .hero-panel{width:150px; background:rgba(34,26,16,.75); border:2px solid var(--edge); border-radius:14px; padding:10px; display:flex; flex-direction:column; align-items:center; gap:4px;}
-  .hero-panel .heroart{width:78px; height:94px; filter:drop-shadow(0 0 12px rgba(157,107,255,.45)); animation:heroBob 3.6s ease-in-out infinite, heroGlow 2.4s ease-in-out infinite;}
-  @keyframes heroBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}} @keyframes heroGlow{0%,100%{filter:drop-shadow(0 0 12px rgba(157,107,255,.4));}50%{filter:drop-shadow(0 0 19px rgba(180,130,255,.7));}}
-  .hero-panel .hname{font-family:serif; color:var(--gold); font-size:14px;}
-  .hero-panel.shimmer{animation:hpsh .55s ease-out;} @keyframes hpsh{0%,100%{box-shadow:none; border-color:var(--edge);}50%{box-shadow:0 0 20px rgba(120,190,255,.6); border-color:#8fd0ff;}}
+  .combatbar{display:flex; align-items:center; justify-content:center; gap:22px; margin:2px 0 6px;}
+  #coach{position:fixed; left:50%; bottom:212px; transform:translateX(-50%); z-index:78; width:min(440px,86vw); background:linear-gradient(180deg,#33280f,#1c1206); border:2px solid var(--gold); border-radius:14px; padding:11px 18px; box-shadow:0 8px 24px rgba(0,0,0,.6); animation:coachIn .3s ease-out; pointer-events:none;}
+  .coach-text{color:var(--txt); font-size:14px; line-height:1.5; text-align:center;} .coach-text b{color:var(--gold);}
+  .coach-arrow{position:absolute; bottom:-9px; left:50%; transform:translateX(-50%) rotate(45deg); width:16px; height:16px; background:#1c1206; border-right:2px solid var(--gold); border-bottom:2px solid var(--gold);}
+  @keyframes coachIn{from{opacity:0; transform:translateX(-50%) translateY(10px);}to{opacity:1;}}
+  .card.tut-glow{animation:tutGlow 1s ease-in-out infinite; z-index:8;}
+  @keyframes tutGlow{0%,100%{box-shadow:0 0 10px rgba(240,201,104,.55);}50%{box-shadow:0 0 24px rgba(240,201,104,1);}}
+  @keyframes heroBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+  @keyframes heroGlow{0%,100%{filter:drop-shadow(0 0 12px rgba(157,107,255,.4));}50%{filter:drop-shadow(0 0 19px rgba(180,130,255,.7));}}
+  @keyframes hpsh{0%,100%{filter:drop-shadow(0 8px 10px rgba(0,0,0,.55));}50%{filter:drop-shadow(0 0 20px rgba(120,190,255,.85));}}
   .combo-chip{display:flex; align-items:center; gap:9px; background:rgba(0,0,0,.4); border:1px solid var(--edge); border-radius:20px; padding:7px 20px;}
   .combo-chip .clab{font-size:11px; color:var(--dim); letter-spacing:.12em; text-transform:uppercase;}
   .combo-chip .cval{font-family:serif; font-size:26px; font-weight:bold; color:var(--dim); min-width:44px; text-align:center;}
@@ -378,7 +392,7 @@
     <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
       <button class="btn" id="continue-btn" style="display:none; font-size:16px; padding:13px 28px;" onclick="resumeRun()">Continue Run</button>
       <button class="btn primary" style="font-size:18px; padding:14px 34px;" onclick="showClassSelect()">Begin the Climb</button>
-      <button class="btn" style="font-size:16px; padding:13px 24px;" onclick="showTutorial(0)">How to Play</button>
+      <button class="btn" style="font-size:16px; padding:13px 24px;" onclick="startTutorial()">Tutorial</button>
     </div>
     <div class="reactguide" id="title-guide" style="max-width:560px; margin:26px auto 0;"></div>
   </div>
@@ -421,14 +435,32 @@
       <div class="stat"><span class="ic" id="ic-floor"></span> Floor <b id="floornum">1</b></div>
     </div>
 
-    <div class="enemies" id="enemies"></div>
+    <div class="stage">
+      <svg class="chamber-svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="cwall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#241a12"/><stop offset="1" stop-color="#150e0a"/></linearGradient>
+          <linearGradient id="cfloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#31261a"/><stop offset="1" stop-color="#191209"/></linearGradient>
+          <radialGradient id="carch" cx="50%" cy="82%" r="70%"><stop offset="0" stop-color="#ff9a44" stop-opacity=".45"/><stop offset="100%" stop-color="#ff9a44" stop-opacity="0"/></radialGradient>
+          <radialGradient id="ctorch" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffe0a0"/><stop offset="38%" stop-color="#ff7a2f" stop-opacity=".8"/><stop offset="100%" stop-color="#ff7a2f" stop-opacity="0"/></radialGradient>
+        </defs>
+        <rect x="0" y="0" width="800" height="176" fill="url(#cwall)"/>
+        <g stroke="#000" stroke-opacity=".22" stroke-width="1"><line x1="0" y1="42" x2="800" y2="42"/><line x1="0" y1="84" x2="800" y2="84"/><line x1="0" y1="126" x2="800" y2="126"/></g>
+        <g><path d="M272 176 V82 A30 30 0 0 1 332 82 V176 Z" fill="url(#carch)"/><path d="M372 176 V72 A30 30 0 0 1 432 72 V176 Z" fill="url(#carch)"/><path d="M472 176 V82 A30 30 0 0 1 532 82 V176 Z" fill="url(#carch)"/></g>
+        <g fill="none" stroke="#3a2c18" stroke-width="3"><path d="M272 176 V82 A30 30 0 0 1 332 82 V176"/><path d="M372 176 V72 A30 30 0 0 1 432 72 V176"/><path d="M472 176 V82 A30 30 0 0 1 532 82 V176"/></g>
+        <g fill="#2a2015" stroke="#3a2c18" stroke-width="2"><rect x="72" y="18" width="58" height="162"/><rect x="62" y="10" width="78" height="14"/><rect x="670" y="18" width="58" height="162"/><rect x="660" y="10" width="78" height="14"/></g>
+        <circle cx="101" cy="70" r="42" fill="url(#ctorch)"/><circle cx="699" cy="70" r="42" fill="url(#ctorch)"/>
+        <circle cx="101" cy="70" r="5" fill="#ffe6b0"/><circle cx="699" cy="70" r="5" fill="#ffe6b0"/>
+        <rect x="0" y="150" width="800" height="42" fill="#150e0a" opacity=".5"/>
+        <polygon points="0,300 800,300 640,176 160,176" fill="url(#cfloor)"/>
+        <g stroke="#000" stroke-opacity=".22" stroke-width="1.5"><line x1="160" y1="176" x2="-70" y2="300"/><line x1="300" y1="176" x2="215" y2="300"/><line x1="400" y1="176" x2="400" y2="300"/><line x1="500" y1="176" x2="585" y2="300"/><line x1="640" y1="176" x2="870" y2="300"/><line x1="115" y1="216" x2="685" y2="216"/><line x1="55" y1="256" x2="745" y2="256"/></g>
+      </svg>
+      <div class="chamber"></div>
+      <div class="hero-stage"><div class="heroart" id="combat-hero"></div></div>
+      <div class="enemies" id="enemies"></div>
+    </div>
 
-    <div class="arena-mid">
-      <div class="hero-panel">
-        <div class="heroart" id="combat-hero"></div>
-        <div class="hname" id="hero-name">Runeblade</div>
-      </div>
-      <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+    <div class="combatbar">
+      <div style="text-align:center;">
         <div class="combo-chip t0" id="combo-chip"><span class="clab">Combo</span><span class="cval" id="combo-val">×0</span></div>
         <div class="combo-hint" id="combo-hint">Chain a different element to react.</div>
       </div>
@@ -502,6 +534,30 @@ const HERO_RUNEBLADE=`<svg viewBox="0 0 100 120" class="hk">
   <circle cx="44.5" cy="52" r="2.5" fill="#b98cff"/><circle cx="55.5" cy="52" r="2.5" fill="#b98cff"/>
   <circle cx="26" cy="94" r="4" fill="#a06bff" opacity=".8"/><circle cx="74" cy="94" r="4" fill="#a06bff" opacity=".8"/>
 </svg>`;
+const HERO_RUNEBLADE_FULL=`<svg viewBox="0 0 120 224" class="hkf" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="rbfCloak" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#43356e"/><stop offset="1" stop-color="#1b1533"/></linearGradient>
+    <linearGradient id="rbfSteel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9498aa"/><stop offset="1" stop-color="#3a3c4a"/></linearGradient>
+    <linearGradient id="rbfBlade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eaf0ff"/><stop offset="1" stop-color="#8fa0d0"/></linearGradient>
+  </defs>
+  <path d="M60 58 C37 66 33 132 42 208 L80 208 C90 134 85 70 60 58 Z" fill="url(#rbfCloak)"/>
+  <path d="M60 62 L61 208" stroke="#120e26" stroke-width="1.4" opacity=".5"/>
+  <path d="M46 202 L59 202 L59 216 L43 216 Z" fill="#1a1530"/>
+  <path d="M63 202 L78 202 L80 216 L63 216 Z" fill="#1a1530"/>
+  <path d="M49 64 C49 59 71 59 71 64 L72 102 C72 112 64 118 60 118 C56 118 48 112 48 102 Z" fill="url(#rbfSteel)"/>
+  <rect x="48" y="99" width="24" height="6" rx="2" fill="#3a2c18"/>
+  <circle cx="60" cy="81" r="4" fill="#a06bff" opacity=".85"/>
+  <ellipse cx="47" cy="66" rx="10" ry="7" fill="url(#rbfSteel)"/><ellipse cx="73" cy="66" rx="10" ry="7" fill="url(#rbfSteel)"/>
+  <circle cx="47" cy="66" r="3.4" fill="#a06bff"/><circle cx="73" cy="66" r="3.4" fill="#a06bff"/>
+  <path d="M48 30 C48 17 76 17 76 33 C76 47 68 55 60 55 C52 55 48 45 48 33 Z" fill="url(#rbfCloak)" stroke="#5a4a90" stroke-width="1.2"/>
+  <path d="M57 34 C57 30 73 30 73 36 C73 46 67 50 62 50 C57 50 57 42 57 36 Z" fill="#0c0a18"/>
+  <circle cx="65" cy="38" r="2.4" fill="#b98cff"/><circle cx="71" cy="38" r="2" fill="#b98cff"/>
+  <path d="M73 92 L92 82" stroke="url(#rbfSteel)" stroke-width="7" stroke-linecap="round"/>
+  <path d="M96 86 L92 24 L88 86 L92 100 Z" fill="url(#rbfBlade)" stroke="#20222c" stroke-width="1"/>
+  <g stroke="#a06bff" stroke-width="1.6" opacity=".95"><line x1="92" y1="38" x2="92" y2="48"/><line x1="89" y1="54" x2="95" y2="54"/></g>
+  <path d="M84 86 L100 86 L98 90 L86 90 Z" fill="url(#rbfSteel)"/>
+  <circle cx="92" cy="102" r="3" fill="url(#rbfSteel)"/>
+</svg>`;
 const HERO_LOCKED=`<svg viewBox="0 0 100 120" class="hk"><defs><linearGradient id="lk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a4458"/><stop offset="1" stop-color="#241f30"/></linearGradient></defs><path d="M30 44 C30 28 70 28 70 44 C70 60 63 72 50 74 C37 72 30 60 30 44 Z" fill="url(#lk)"/><path d="M16 110 C16 84 34 78 50 78 C66 78 84 84 84 110 Z" fill="url(#lk)"/><path d="M42 50 h16 v14 a8 8 0 0 1 -16 0 Z" fill="#161222"/><path d="M44 50 v-4 a6 6 0 0 1 12 0 v4" fill="none" stroke="#6a6080" stroke-width="2.4"/><circle cx="50" cy="57" r="2.6" fill="#8a80a8"/></svg>`;
 
 const CREATURE={
@@ -519,6 +575,7 @@ const CREATURE={
   sentinel:`<svg viewBox="0 0 100 100"><defs><linearGradient id="stn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f8a7c"/><stop offset="100%" stop-color="#45423a"/></linearGradient></defs><path d="M40 14 L60 14 L64 30 L36 30 Z" fill="url(#stn)"/><rect x="42" y="20" width="16" height="6" fill="#161610"/><circle cx="46" cy="23" r="2" fill="#7fd0ff"/><circle cx="54" cy="23" r="2" fill="#7fd0ff"/><path d="M28 34 L72 34 L79 80 L21 80 Z" fill="url(#stn)"/><path d="M21 36 L34 34 L34 52 L16 52 Z M79 36 L66 34 L66 52 L84 52 Z" fill="#5c584c"/><circle cx="50" cy="56" r="9" fill="#12303f" stroke="#7fd0ff" stroke-width="1.6"/><path d="M50 50 L50 62 M45 56 L55 56" stroke="#7fd0ff" stroke-width="1.8"/></svg>`,
   colossus:`<svg viewBox="0 0 100 100"><defs><linearGradient id="col" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7f6f5d"/><stop offset="100%" stop-color="#322a20"/></linearGradient></defs><rect x="10" y="34" width="17" height="46" rx="4" fill="url(#col)"/><rect x="73" y="34" width="17" height="46" rx="4" fill="url(#col)"/><rect x="37" y="8" width="26" height="20" rx="3" fill="url(#col)"/><rect x="42" y="15" width="16" height="6" fill="#160f08"/><circle cx="46" cy="18" r="2.2" fill="#ff7a2f"/><circle cx="54" cy="18" r="2.2" fill="#ff7a2f"/><path d="M24 30 L76 30 L82 80 L18 80 Z" fill="url(#col)"/><circle cx="50" cy="52" r="11" fill="#3a1a0a"/><circle cx="50" cy="52" r="6.5" fill="#ff8a3a"/><circle cx="50" cy="52" r="11" fill="none" stroke="#ff7a2f" stroke-width="1.6"/><path d="M28 66 L72 66 M34 40 L34 66 M66 40 L66 66" stroke="#160f08" stroke-width="1.5" opacity=".55"/></svg>`,
   archon:`<svg viewBox="0 0 100 100"><defs><radialGradient id="arc" cx="50%" cy="40%" r="66%"><stop offset="0" stop-color="#5e3e90"/><stop offset="68%" stop-color="#2a1650"/><stop offset="100%" stop-color="#0d0620"/></radialGradient></defs><path d="M30 26 L22 6 L38 20 M70 26 L78 6 L62 20 M50 18 L44 4 L50 0 L56 4 Z" fill="#b98cff"/><path d="M28 30 C28 16 72 16 72 30 L78 70 C78 84 62 92 50 92 C38 92 22 84 22 70 Z" fill="url(#arc)" stroke="#7a5fb0" stroke-width="1.4"/><circle cx="42" cy="44" r="3" fill="#d9b8ff"/><circle cx="58" cy="44" r="3" fill="#d9b8ff"/><circle cx="50" cy="52" r="3.6" fill="#f0e0ff"/><circle cx="44" cy="59" r="2" fill="#b98cff"/><circle cx="56" cy="59" r="2" fill="#b98cff"/><g fill="#c9a6ff"><circle cx="36" cy="67" r="1"/><circle cx="64" cy="69" r="1"/><circle cx="50" cy="75" r="1.2"/><circle cx="43" cy="79" r="1"/></g></svg>`,
+  dummy:`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="92" rx="22" ry="5" fill="#5a3f22"/><rect x="46" y="52" width="8" height="40" fill="#6a4a2a"/><path d="M32 50 L20 60 M68 50 L80 60" stroke="#6a4a2a" stroke-width="7" stroke-linecap="round"/><circle cx="50" cy="40" r="21" fill="#c9a86a" stroke="#8a6a3a" stroke-width="2"/><circle cx="50" cy="40" r="14" fill="none" stroke="#b04a3a" stroke-width="3"/><circle cx="50" cy="40" r="6" fill="#b04a3a"/></svg>`,
 };
 
 /* ---------- DATA ---------- */
@@ -635,6 +692,7 @@ const ENEMIES={
   sentinel:{name:'Stone Sentinel', big:true, hp:52, pattern:[{t:'def',v:12},{t:'atk',v:16},{t:'def',v:12}]},
   colossus:{name:'Iron Colossus', big:true, hp:120, pattern:[{t:'atk',v:12},{t:'def',v:14},{t:'atk',v:18},{t:'buff'}]},
   archon:{name:'Void Archon', big:true, hp:150, pattern:[{t:'atk',v:14},{t:'debuff',apply:{vuln:2},msg:'unmakes your guard'},{t:'atk',v:20},{t:'def',v:16}]},
+  dummy:{name:'Training Dummy', hp:16, pattern:[{t:'def',v:2}]},
 };
 function rollGroup(type){
   if(type==='elite') return Math.random()<0.5?['golem']:['sentinel'];
@@ -833,6 +891,7 @@ function playCard(hi){
   log(line);
 
   G.hand.splice(hi,1); G.discard.push(card);
+  if(G.tutorial) tutOnPlay(reactName);
   checkCombatEnd(); renderCombat();
 }
 
@@ -869,6 +928,7 @@ function checkCombatEnd(){ if(G.hp<=0){ G.inCombat=false; return; } if(aliveEnem
 /* ---------- REWARD / NODES ---------- */
 function goldFor(type){ if(type==='boss') return 50; if(type==='elite') return 28+Math.floor(Math.random()*10); return 12+Math.floor(Math.random()*8); }
 function winCombat(){
+  if(G.tutorial){ return tutorialComplete(); }
   G.map.cur.done=true;
   const type=G.map.cur.type, isBoss=type==='boss', isElite=type==='elite';
   log('Victory!'); sfx('victory');
@@ -898,6 +958,33 @@ function restUpgrade(){ const up=G.deck.map((c,i)=>({c,i})).filter(x=>!x.c.upgra
   overlay(`<h2>Upgrade a Card</h2><p>Choose a card to strengthen — it grows with you.</p><div class="reward-cards" style="max-height:52vh;overflow-y:auto;">${list}</div><button class="btn" onclick="closeOverlay(); returnToMap();">Skip</button>`); }
 function doUpgrade(i){ if(upgradeCard(G.deck[i])) sfx('relic'); closeOverlay(); returnToMap(); }
 function returnToMap(){ G.inCombat=false; playMusic('map'); screenWipe(()=>{ show('map-wrap'); renderMap(); }); }
+
+/* --- INTERACTIVE TUTORIAL (guided first battle) --- */
+function startTutorial(){
+  closeOverlay();
+  G=newGame('runeblade'); G.tutorial=true; G._tutStep=0; G._tutHighlight='any';
+  G.inCombat=true; G.act=1; G.floor=1;
+  G.map={rows:[[{r:0,c:0,type:'combat',done:false,to:[]}]], cur:{r:0,c:0,type:'combat',done:false,to:[]}};
+  const t=ENEMIES.dummy;
+  G.enemies=[{id:'dummy',sprite:'dummy',name:t.name,hp:t.hp,maxHp:t.hp,pattern:t.pattern,pi:0,atkMul:1,block:0,burn:0,poison:0,freeze:0,vuln:0,weak:0,strength:0,intent:null,big:false}];
+  G.target=0; G.block=0; G.relicUsed={}; G.strength=0; G.weak=0; G.vuln=0;
+  G.drawPile=[]; G.discard=[]; G.hand=['embercut','stormjab','frostedge','stoneguard'].map(mkCard);
+  G.energy=6; G.playerTurn=true; G.combo=0; G.lastElem=null;
+  computeIntents();
+  document.getElementById('combat').dataset.act='1'; document.getElementById('floornum').textContent=1;
+  show('combat'); logClear(); log('Training grounds.'); buildEnemies(); renderCombat();
+  coach("Welcome, Runeblade. Cards cost energy (✦). Click a <b>glowing card</b> to play it — attacks hit the dummy.");
+}
+function coach(text){ let c=document.getElementById('coach'); if(!c){ c=document.createElement('div'); c.id='coach'; document.body.appendChild(c); }
+  c.innerHTML=`<div class="coach-text">${text}</div><div class="coach-arrow"></div>`; }
+function coachClear(){ const c=document.getElementById('coach'); if(c) c.remove(); G._tutHighlight=null; }
+function tutOnPlay(reactName){
+  if(!G.tutorial) return;
+  if(reactName && G._tutStep<2){ G._tutStep=2; G._tutHighlight=null; coach("💥 A <b>Reaction!</b> Your Combo grew — chaining different elements deals bonus damage <b>and</b> Block. Keep chaining and defeat the dummy!"); }
+  else if(G._tutStep===0){ G._tutStep=1; G._tutHighlight='diff'; coach("Nice. Now the key move: play a card of a <b>DIFFERENT element</b> than the last one to trigger a <b>Reaction</b> and build your Combo."); }
+}
+function tutorialComplete(){ G.inCombat=false; G.tutorial=false; coachClear(); sfx('victory');
+  overlay(`<h2 style="color:var(--gold)">Training Complete</h2><p>That's the heart of it: <b>chain different elements</b> to build your combo, and keep it alive. The higher the combo, the deadlier you are. Now — the tower awaits.</p><button class="btn primary" onclick="closeOverlay(); showClassSelect();">Choose your Aspirant</button>`); }
 
 /* --- SHOP --- */
 const CARD_PRICE={common:45,uncommon:70,rare:95};
@@ -1109,7 +1196,8 @@ function renderCombat(){
   const h=document.getElementById('hand');
   const deal=G._dealAnim; G._dealAnim=false;
   h.innerHTML=G.hand.map(c=>cardFace(c, G.playerTurn && G.energy>=c.cost)).join('');
-  [...h.children].forEach((el,i)=>{ el.onclick=()=>playCard(i); if(deal){ el.classList.add('dealt'); el.style.animationDelay=(i*0.05)+'s'; } });
+  [...h.children].forEach((el,i)=>{ el.onclick=()=>playCard(i); if(deal){ el.classList.add('dealt'); el.style.animationDelay=(i*0.05)+'s'; }
+    if(G.tutorial && G._tutHighlight){ const c=G.hand[i]; const match = G._tutHighlight==='any' || (G._tutHighlight==='diff' && c.elem!==G.lastElem) || G._tutHighlight===c.elem; if(match && G.energy>=c.cost) el.classList.add('tut-glow'); } });
   layoutFan();
   updateEnemies();
 }
@@ -1186,7 +1274,7 @@ function drawMapLines(){
     }); }));
   map.insertBefore(svg, map.firstChild);
 }
-function blockShimmer(){ const p=document.querySelector('.hero-panel'); if(!p) return; p.classList.remove('shimmer'); void p.offsetWidth; p.classList.add('shimmer'); clearTimeout(p._bt); p._bt=setTimeout(()=>p.classList.remove('shimmer'),560); }
+function blockShimmer(){ const p=document.querySelector('.hero-stage'); if(!p) return; p.classList.remove('shimmer'); void p.offsetWidth; p.classList.add('shimmer'); clearTimeout(p._bt); p._bt=setTimeout(()=>p.classList.remove('shimmer'),560); }
 function comboPulse(){ const c=document.getElementById('combo-chip'); c.classList.remove('pulse'); void c.offsetWidth; c.classList.add('pulse'); clearTimeout(c._ct); c._ct=setTimeout(()=>c.classList.remove('pulse'),360); }
 function screenWipe(cb){ const w=document.createElement('div'); w.className='wipe'; document.body.appendChild(w); setTimeout(()=>{ if(cb)cb(); },330); setTimeout(()=>w.remove(),760); }
 function victoryFlash(cb){ const v=document.createElement('div'); v.className='victory-flash'; v.innerHTML=`<div class="vf-rays"></div><div class="vf-text">VICTORY</div>`; document.body.appendChild(v); setTimeout(()=>{ v.remove(); if(cb)cb(); },1050); }
@@ -1286,7 +1374,7 @@ function openSettings(){
 }
 
 /* ---------- INIT ---------- */
-document.getElementById('combat-hero').innerHTML=HERO_RUNEBLADE;
+document.getElementById('combat-hero').innerHTML=HERO_RUNEBLADE_FULL;
 document.getElementById('title-guide').innerHTML=guideHTML();
 document.getElementById('ic-heart').innerHTML=UI_ICON.heart;
 document.getElementById('ic-energy').innerHTML=UI_ICON.energy;
@@ -1299,7 +1387,7 @@ sndInit();
 document.addEventListener('click',e=>{ if(e.target.closest('.btn, .node.reachable, .endturn, .rcard, #gear-btn')) sfx('button'); });
 setTimeout(()=>playMusic('map'),100);
 if(localStorage.getItem('sigil_save')) document.getElementById('continue-btn').style.display='inline-block';
-if(!localStorage.getItem('sigil_tut')){ try{ localStorage.setItem('sigil_tut','1'); }catch(e){} setTimeout(()=>{ if(document.getElementById('title').style.display!=='none') showTutorial(0); }, 600); }
+if(!localStorage.getItem('sigil_tut')){ try{ localStorage.setItem('sigil_tut','1'); }catch(e){} setTimeout(()=>{ if(document.getElementById('title').style.display!=='none' && !localStorage.getItem('sigil_save')) overlay(`<h2>Welcome, Aspirant</h2><p>SIGILSPIRE is a deckbuilder where the ORDER you play cards matters. Learn the combo in a quick tutorial battle?</p><div style="display:flex; gap:12px; justify-content:center;"><button class="btn primary" onclick="startTutorial()">Play Tutorial</button><button class="btn" onclick="closeOverlay()">Skip</button></div>`); }, 500); }
 function spawnEmbers(container,count){ if(!container) return;
   for(let i=0;i<count;i++){ const e=document.createElement('div'); e.className='ember'; const size=(2+Math.random()*3).toFixed(1);
     e.style.left=(Math.random()*100)+'%'; e.style.width=e.style.height=size+'px'; e.style.animationDuration=(6+Math.random()*7).toFixed(1)+'s'; e.style.animationDelay=(-Math.random()*13).toFixed(1)+'s'; e.style.setProperty('--drift',(Math.random()*80-40).toFixed(0)+'px'); container.appendChild(e); } }
