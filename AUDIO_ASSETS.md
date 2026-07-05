@@ -81,6 +81,9 @@ Pick looping/ambient tracks. Aim for ~1–3 min loops.
 
 ---
 
+## ✍️ CURRENT ATTRIBUTION (music in the game — CC-BY 4.0, credited in-game Settings)
+- "Myst on the Moor" (map), "Crypto" (combat), "Volatile Reaction" (boss) by **Kevin MacLeod** — incompetech.com — licensed under Creative Commons: By Attribution 4.0. Credit shown in the in-game Settings panel.
+
 ## ✍️ Attribution (fill in ONLY for CC-BY tracks you use)
 If you use anything CC-BY (e.g. Incompetech), record it here and I'll add a credits line in-game:
 ```

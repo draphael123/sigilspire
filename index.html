@@ -1365,7 +1365,8 @@ function openSettings(){
       <label style="display:block; margin:14px 0 4px; font-size:14px; color:var(--dim);">Music Volume</label>
       <input type="range" id="set-music" min="0" max="100" value="${Math.round(s.music*100)}" style="width:100%;">
     </div>
-    <button class="btn gold" onclick="closeOverlay()" style="margin-top:20px;">Done</button>`);
+    <div style="font-size:10.5px; color:var(--dim); margin-top:16px; line-height:1.5;">Music: "Myst on the Moor", "Crypto", "Volatile Reaction" by <b>Kevin MacLeod</b> (incompetech.com) — licensed under Creative Commons: By Attribution 4.0.</div>
+    <button class="btn gold" onclick="closeOverlay()" style="margin-top:14px;">Done</button>`);
   const mute=document.getElementById('set-mute'), sv=document.getElementById('set-sfx'), mv=document.getElementById('set-music');
   mute.onchange=()=>{ SND.settings.muted=mute.checked; applySnd(); saveSnd(); };
   sv.oninput=()=>{ SND.settings.sfx=sv.value/100; applySnd(); saveSnd(); };
